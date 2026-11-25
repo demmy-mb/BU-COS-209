@@ -1,0 +1,132 @@
+PRODUCT REQUIREMENTS DOCUMENT
+OPEN UMIS
+==================================================
+
+PROJECT DETAILS
+
+Course:    Software Engineering / Systems Analysis & Design
+Project:   Open UMIS
+Platform:  Mobile app (iOS and Android) and web admin dashboard
+
+
+1. PROBLEM STATEMENT
+
+Students use the university's UMIS portal to register for courses and check
+semester grades. The portal is designed mainly for desktop use and is difficult
+to use on phones. Attendance is recorded on paper, announcements are shared
+across WhatsApp groups, and online class links are distributed separately.
+This project will bring these tasks into one student app and a web dashboard.
+
+
+2. PROJECT OBJECTIVE
+
+Open UMIS will let students register for courses, view timetables and grades,
+check in to classes, open online class links, view campus balances, and read
+official announcements. Lecturers will use it to record attendance, share
+course materials, and submit grades. The app will keep the timetable, grades,
+and balance information available from the most recently saved data when the
+device is offline.
+
+
+3. TARGET USERS
+
+- Students
+  View timetables and grades, register for courses, check in by NFC or QR code,
+  open online class links, and view campus and meal balances.
+
+- Lecturers
+  Start attendance sessions, monitor class attendance percentages, share course
+  materials, and upload grades.
+
+- Administrators
+  Publish official announcements and maintain course and credit records.
+
+
+4. CORE FEATURES
+   MVP SCOPE
+
+4.1 Academic Core
+    Offline-first
+
+- Course Registration
+  Let students submit course selections. Check prerequisites and credit-unit
+  limits before confirming a selection. When a request is waiting to be
+  processed, show whether it is pending, confirmed, or rejected.
+
+- Timetable and Grades
+  Save the weekly timetable and semester results on the device for offline
+  viewing. Calculate CGPA from the grades recorded for the student.
+
+4.2 Smart Attendance
+    NFC and Dynamic QR
+
+- Attendance Check-In
+  Let students check in by tapping a classroom NFC tag or scanning a lecturer's
+  QR code. The QR code expires after 10 seconds. Require the device to be
+  within the configured classroom area when location checks are enabled.
+
+- Attendance Record
+  Show the number of sessions attended, the total sessions held, and the
+  resulting percentage for each course. Warn students before their attendance
+  falls below the 75% exam threshold. Confirm this threshold against university
+  policy before implementation.
+
+4.3 Campus Credits and Wallet
+
+- Campus Balances
+  Show tuition clearance status, cafeteria and meal credits, and campus utility
+  balances, using the latest data received from the relevant university
+  systems.
+
+4.4 Virtual Classroom and Official News
+
+- Course Materials
+  Provide course-specific links to online classes, lecture slides, and
+  assignment deadlines.
+
+- Official Announcements
+  Let administrators select the intended faculty, department, and level for
+  each announcement. Show announcements to students whose profiles match the
+  selected audience, and send push notifications when enabled.
+
+
+5. NON-FUNCTIONAL REQUIREMENTS
+
+- Performance
+  Proposed target: show the saved timetable, grades, and balance information
+  within 1 second of opening each screen while offline. Measure this on agreed
+  test devices; confirm the target before release.
+
+- Supported Platforms
+  Provide a student app for iOS and Android and a web dashboard for lecturers.
+  Specify supported operating-system versions and browser versions before
+  implementation.
+
+- Access Control
+  Give students, lecturers, and administrators only the permissions needed for
+  their roles. Protect session tokens used for attendance check-ins.
+
+
+6. PROPOSED TECH STACK
+
+- Mobile App: React Native (Expo)
+- Web Dashboard: Next.js
+- Backend and Real-Time Sync: Convex / Supabase
+- Local Storage: SQLite / MMKV for offline caching
+
+
+7. SUCCESS METRICS
+
+- Course Registration
+  Proposed target: complete course selection and receive confirmation in under
+  2 minutes. Measure from opening the registration screen to confirmation, and
+  validate the target in user testing.
+
+- Attendance
+  Proposed target: record attendance for 100 students in under 60 seconds.
+  Measure from the lecturer starting the session to the final successful
+  attendance record, under agreed test conditions.
+
+- Official Announcements
+  During the pilot, measure the share of official announcements published in
+  Open UMIS. Set a target after collecting a baseline.
