@@ -4,410 +4,429 @@
 
 | Field | Details |
 | --- | --- |
-| Document status | Draft for stakeholder review |
+| Document status | School-project MVP draft |
+| Product type | Responsive web application prototype |
 | Course context | Software Engineering / Systems Analysis & Design |
-| Product | Open UMIS |
-| Platforms | iOS and Android mobile app; web dashboard |
+| Intended users | Students, lecturers, project demonstrators |
 | Document owner | Open UMIS project team |
-| Last updated | 25 November 2026 |
+| Last updated | 26 November 2026 |
 
 ---
 
-## 1. Overview
+## 1. Executive Summary
 
-The university UMIS portal is the main system for academic records and course administration, but the current experience is difficult to use on a phone. Attendance is often recorded on paper, official notices are split across WhatsApp groups, and links for online classes are shared through separate channels.
+Open UMIS is a student-project prototype that brings a few common academic tasks into one responsive website. A student can view a sample timetable, request course registration, check into a sample class using a QR code, and read announcements. A lecturer can start an attendance session and review its attendance list. An administrator can manage the sample course catalogue and publish announcements.
 
-Open UMIS brings important day-to-day academic tasks into a single, accessible product. Students will be able to register for courses, view their timetable and results, check in to classes, open class resources, monitor campus balances, and receive official announcements. Lecturers will have tools for attendance, course materials, and grade entry. Administrators will manage course records and target announcements to the right student groups.
+The prototype is deliberately smaller than a university information system. It will use fictional or clearly approved test data and will not make official academic, attendance, or financial decisions. Its purpose is to demonstrate useful workflows and a foundation that could be evaluated for a future pilot.
 
-The first release should focus on reliable academic workflows, clear role-based access, and useful offline access. It should complement the university's existing UMIS processes rather than replace them without confirmation from the responsible departments.
+The project should be simple enough for beginner developers to complete: one web application, one relational database, a small number of roles, and no direct integrations with university systems. The design should avoid choices that make future growth unnecessarily difficult, without trying to solve production-scale concerns before the prototype is proven.
 
 ## 2. Problem Statement
 
-Students and staff currently need to move between several tools and channels to complete common academic tasks:
+Students may need to check academic information in one system, find attendance details in another, and look for class updates across separate channels. This can make routine tasks harder to find and follow.
 
-- The UMIS portal is not optimized for regular mobile use.
-- Physical attendance sheets can be slow to complete and difficult to reconcile.
-- Announcements are distributed through informal channels that do not reliably reach the intended audience.
-- Online class links and course materials may be posted in different places.
-- Students cannot consistently rely on saved academic information when a network connection is unavailable.
+Open UMIS will demonstrate how a single, role-aware website could make a few of those tasks clearer. The school-project version will focus on a small, testable set of workflows using sample data. It will not claim to replace the university's official UMIS or its policies.
 
-Open UMIS should reduce this fragmentation with a mobile-first experience for students and a web experience for staff, while preserving data accuracy and university control over official records.
+## 3. Product Goals
 
-## 3. Goals and Success
+1. Demonstrate a clear student, lecturer, and administrator experience in one web application.
+2. Let students submit a sample course registration request and see its status.
+3. Demonstrate classroom attendance using a session-specific QR code.
+4. Give students one place to find a timetable and official project announcements.
+5. Keep the implementation understandable to beginner developers and straightforward to test.
+6. Make future production work possible through a structured data model and clear separation between the interface and data access.
 
-### 3.1 Product Goals
+## 4. Non-Goals
 
-1. Give students a straightforward way to complete core academic tasks from their phones.
-2. Make attendance capture faster and easier to verify.
-3. Provide one place for official announcements and course-specific resources.
-4. Keep recently loaded timetable, grade, and balance information available offline.
-5. Apply appropriate permissions so users can access only the information and actions assigned to their role.
+The school-project prototype will not:
 
-### 3.2 Success Measures
+- Replace the university's official UMIS or registrar approval process.
+- Use real student records, official grades, or personal financial information.
+- Display or calculate official CGPA.
+- Process tuition, meal, or utility payments or balances.
+- Connect to university identity, academic, finance, or attendance systems.
+- Guarantee that a student is physically present because a QR code was scanned.
+- Provide rotating QR codes, NFC check-in, GPS or classroom geofencing.
+- Provide native iOS or Android applications.
+- Support offline submissions or background synchronization.
+- Claim production security, regulatory compliance, or institutional readiness.
 
-The following measures are proposed for pilot evaluation. Final targets should be approved after baseline testing and confirmation with university stakeholders.
+## 5. Scope
 
-| Area | Proposed pilot measure |
+### 5.1 Included in the School-Project MVP
+
+- One responsive website for phone, tablet, and desktop-sized screens
+- Sign-in for three roles using project test accounts
+- Student dashboard with sample timetable and announcements
+- Sample course catalogue and course registration requests
+- Lecturer attendance session creation and attendance list
+- Student QR check-in for an active session
+- Administrator tools for managing sample courses and announcements
+- Basic role-based access checks
+- Seeded demonstration data and a documented demo flow
+
+### 5.2 Deferred Until After the School Project
+
+- Live integration with the university UMIS
+- Real student onboarding and identity verification
+- Official course approval and grade workflows
+- Official academic results and CGPA calculation
+- Financial balances and payment services
+- Attendance corrections, disputes, appeals, and policy enforcement
+- NFC and location-based attendance checks
+- Push notifications
+- Offline data and synchronization
+- Native mobile applications
+- Advanced analytics, audit exports, and high-volume load testing
+
+## 6. Users and Permissions
+
+### 6.1 Student
+
+Students can:
+
+- View their own sample timetable.
+- Browse the published course catalogue.
+- Submit a course registration request and view its status.
+- Check in to an active attendance session by scanning its QR code.
+- View their own attendance records.
+- Read published announcements.
+
+Students cannot approve their own registration, edit attendance records, manage courses, or publish official announcements.
+
+### 6.2 Lecturer
+
+Lecturers can:
+
+- View only the sample courses assigned to their test account.
+- Start and end an attendance session for an assigned course.
+- Display the QR code for an active session.
+- View the attendance list for sessions they started.
+- Read announcements.
+
+Lecturers cannot manage users, change course catalogue rules, or publish administrator announcements.
+
+### 6.3 Administrator
+
+The administrator can:
+
+- Create, edit, and archive sample courses.
+- Assign sample courses to lecturers.
+- Review student registration requests and set them to approved or rejected.
+- Publish, edit, and archive announcements.
+- View sample users and overall prototype activity.
+
+The administrator role is for project demonstration only. A production product would require more carefully separated and audited permissions.
+
+## 7. Main User Journeys
+
+### 7.1 Student Registration
+
+1. The student signs in using a project test account.
+2. The student opens the course catalogue.
+3. The student chooses one or more available courses.
+4. The system checks the simple prototype rules described in Section 8.2.
+5. The student submits the selection.
+6. The request appears as pending until an administrator approves or rejects it.
+7. The student sees the updated status and, if rejected, a short reason.
+
+### 7.2 Lecturer Attendance
+
+1. The lecturer signs in and selects an assigned course.
+2. The lecturer starts a session for that course.
+3. The system creates a session-specific QR code.
+4. Students scan the code while signed in and confirm their check-in.
+5. The lecturer sees the attendance list update after refresh or a normal page update.
+6. The lecturer ends the session; further check-ins are rejected.
+
+### 7.3 Administrator Announcement
+
+1. The administrator signs in and opens announcement management.
+2. The administrator enters a title and message.
+3. The administrator publishes the announcement.
+4. Students can see the published announcement on their dashboard.
+
+## 8. Functional Requirements
+
+### 8.1 Sign-In and Role Access
+
+1. Each demo user must sign in before accessing role-specific pages.
+2. The prototype must provide at least one test account for each role.
+3. The application must determine the user's role from trusted account data, not from a role value submitted by the browser.
+4. Students can only view their own registration requests and attendance records.
+5. Lecturers can only manage attendance for courses assigned to them.
+6. Only administrators can manage courses, review registration requests, or publish announcements.
+7. Signing out returns the user to the sign-in page and ends the application session.
+8. A user who opens a page without the required role receives a clear access-denied message or is redirected to an appropriate page.
+
+### 8.2 Course Catalogue and Registration
+
+1. The catalogue shows each sample course's code, title, credit units, and assigned lecturer.
+2. Archived courses cannot be selected for new requests.
+3. A student can select available courses and submit one registration request for the current sample term.
+4. For the prototype, the system rejects duplicate course selections and requests that exceed the project-configured credit-unit limit.
+5. Course prerequisites and timetable-clash rules are excluded unless the team has time after the main flows work.
+6. A submitted request has one of these statuses: pending, approved, or rejected.
+7. Only an administrator can change a pending request's status.
+8. When rejecting a request, the administrator enters a short reason.
+9. A student can see the status and rejection reason for their own request.
+10. The prototype must make clear that its course approval is a demonstration and not official university registration.
+
+The project team should choose a simple credit limit for its fictional dataset and state it in the demo instructions. It must not present that limit as university policy.
+
+### 8.3 Sample Timetable
+
+1. A student can see a weekly timetable populated from sample course schedule data.
+2. Each timetable entry shows course title, day, start time, end time, and room.
+3. The timetable is based on the student's sample course enrolments.
+4. Empty states explain when no timetable entries are available.
+5. The timetable is available only while the application can reach its backend; offline access is not part of this MVP.
+
+### 8.4 Attendance Sessions and QR Check-In
+
+1. A lecturer can start one attendance session for an assigned course.
+2. A session records its course, lecturer, start time, and active or ended status.
+3. The system creates a QR code that identifies the active session.
+4. A student must be signed in to check in.
+5. The server verifies that the session exists and is active before recording attendance.
+6. Each student can check in only once per session.
+7. A student receives a clear success or failure message.
+8. The lecturer can view a list of students recorded for that session.
+9. Ending a session stops additional check-ins.
+10. Repeated check-in attempts do not create duplicate attendance records.
+11. The QR flow is a classroom demonstration only. It must not be described as proof of physical presence or as resistant to code sharing.
+
+For the prototype, the QR code may contain a link to the check-in page with an unguessable session identifier. The backend must still check the signed-in user and session status; hiding a page or button in the browser is not access control.
+
+### 8.5 Announcements
+
+1. An administrator can create an announcement with a title and message.
+2. An administrator can save a draft or publish an announcement.
+3. Students can see published announcements in reverse chronological order.
+4. Draft and archived announcements are not shown to students.
+5. An announcement with a missing title or message cannot be published.
+6. The MVP supports announcements for all demo students; faculty, department, and level targeting are deferred.
+
+### 8.6 Course Administration
+
+1. An administrator can create a sample course with a unique course code, title, credit units, lecturer, and schedule.
+2. The system rejects a duplicate course code.
+3. An administrator can edit course information.
+4. Archiving a course prevents new registration requests and attendance sessions for that course.
+5. Existing sample records remain available for the demonstration after a course is archived.
+
+## 9. Data Requirements
+
+The initial database should use a small relational model. Exact field names can be chosen during implementation, but the following records and relationships are needed:
+
+| Record | Minimum information |
 | --- | --- |
-| Course registration | 90% of test users can select and submit a valid course set within 2 minutes |
-| Attendance | A session of up to 100 students can be started and all successful records captured within 60 seconds |
-| Offline access | Saved timetable, grades, and balances appear within 1 second on agreed test devices |
-| Announcement reach | Report the percentage of official pilot announcements published through Open UMIS |
-| Grade entry | Lecturers can submit an approved grade sheet without unresolved validation errors |
-| Reliability | Attendance and registration attempts provide a clear pending, success, or failure result |
-
-Results should be measured using representative devices, realistic network conditions, and a documented pilot population. Success targets must not be treated as guaranteed service levels until testing and stakeholder approval are complete.
-
-## 4. Scope
-
-### 4.1 In Scope for the Minimum Viable Product
-
-- Student course registration with prerequisite and credit-unit checks
-- Offline viewing of the latest saved timetable and semester results
-- CGPA calculation from recorded student grades
-- NFC or dynamic QR attendance check-in
-- Optional classroom-area validation
-- Attendance summaries and exam-threshold warnings
-- Campus balance and clearance information
-- Course materials and online class links
-- Assignment deadlines
-- Targeted official announcements
-- Push notifications for enabled announcements
-- Lecturer attendance, course material, and grade workflows
-- Administrator management of course and credit records
-- Role-based access and session protection
-
-### 4.2 Out of Scope for the MVP
-
-- A complete replacement for the university UMIS database or academic governance system
-- Replacement of the university registrar's final approval processes
-- Automated biometric identity verification
-- Native desktop applications
-- Direct integration with every campus payment or utility provider
-- Detailed financial reconciliation or payment processing
-- In-app dispute resolution for grades or attendance
-- Anonymous posting or student-created official announcements
-
-Integrations, data ownership, and final approval rules must be defined with the registrar and system owners before development is treated as complete.
-
-## 5. Target Users
-
-### 5.1 Students
-
-Students use the product primarily to manage and monitor their academic life. Their main tasks are:
-
-- Register for courses
-- View and download timetable information
-- Check semester results and CGPA
-- Check in to classes
-- Open online classes and course materials
-- Review campus, meal, and utility balances
-- Read announcements intended for their faculty, department, or level
-
-### 5.2 Lecturers
-
-Lecturers use the web dashboard to manage work for their assigned courses. Their main tasks are:
-
-- Start and close attendance sessions
-- Monitor attendance for a course
-- Upload course materials and links
-- Record assignment deadlines
-- Submit grades for review or approval according to policy
-
-### 5.3 Administrators
-
-Administrators maintain university records and publish official information. Their main tasks are:
-
-- Manage courses and credit records
-- Maintain student or course data supplied through approved systems
-- Publish announcements to selected faculties, departments, and levels
-- Review operational status and user access
-
-## 6. User Stories
-
-The following stories describe the MVP from the user's perspective.
-
-### Student
-
-- As a student, I want to register for courses so that I can submit a valid selection for approval.
-- As a student, I want to see why a course was rejected so that I can correct my selection.
-- As a student, I want to view my timetable and results offline so that I can continue to access them during poor connectivity.
-- As a student, I want to calculate or view my CGPA so that I can understand my academic standing.
-- As a student, I want to check in using NFC or QR so that attendance recording is quick.
-- As a student, I want to see my attendance percentage so that I can understand whether I meet the required threshold.
-- As a student, I want to see my campus balances so that I can plan expenses and check clearance status.
-- As a student, I want to receive official announcements for my profile so that I do not miss important notices.
-
-### Lecturer
-
-- As a lecturer, I want to start an attendance session so that students can check in for the current class.
-- As a lecturer, I want to monitor attendance as it is recorded so that I can identify failed or missing submissions.
-- As a lecturer, I want to share course materials and class links so that students can find resources in one place.
-- As a lecturer, I want to submit grades so that they can pass through the university's approval process.
-
-### Administrator
-
-- As an administrator, I want to maintain course and credit records so that registration rules stay current.
-- As an administrator, I want to target announcements by faculty, department, and level so that notices reach the intended audience.
-- As an administrator, I want to review published notices so that official communications remain consistent.
-
-## 7. Functional Requirements
-
-### 7.1 Authentication and Roles
-
-1. Students, lecturers, and administrators must authenticate using an approved university identity mechanism.
-2. The system must assign permissions from the user's account role and course or organizational assignments.
-3. Students must not be able to view or change another student's academic records.
-4. Lecturers must only manage courses assigned to them unless separately authorized.
-5. Administrators must perform sensitive administrative actions through protected account permissions.
-6. Session tokens must expire according to security policy and must be invalidated after logout or account changes.
-
-Implementation of the exact identity provider and authentication flow remains subject to university technical approval.
-
-### 7.2 Course Registration
-
-1. The student sees available courses for the correct academic session and level.
-2. The system checks course prerequisites, timetable clashes, and credit-unit limits before presenting a selection as eligible.
-3. The student can save a draft selection and submit it for processing.
-4. Each submission has a status of draft, pending, confirmed, or rejected.
-5. A rejected selection identifies the reason, such as a missing prerequisite or an exceeded credit-unit limit.
-6. The system prevents the duplicate submission of the same course in a registration attempt.
-7. Final course confirmation is returned by the approved university source or workflow.
-8. If submission is delayed by connectivity loss, the app clearly indicates that the request remains pending and provides a retry or sync state.
-
-Exact rules for course selection, credit limits, and confirmation authority must come from the relevant university academic policy.
-
-### 7.3 Timetable and Grades
-
-1. The app downloads and caches the student's timetable for the active academic session.
-2. The app downloads and caches semester results and grades from an approved source.
-3. The student can view cached information without a network connection.
-4. Cached information displays its most recent synchronization time.
-5. The app clearly distinguishes saved cached data from newly confirmed data.
-6. CGPA is calculated from the student's recorded grades and credit values using the university's approved grading rules.
-7. The app does not present a calculated CGPA as official if the underlying grade source or calculation policy has not been confirmed.
-
-### 7.4 Attendance Check-In
-
-1. A lecturer starts an attendance session for an assigned course and class.
-2. The attendance session has a start time and an agreed end time or expiry time.
-3. A student can check in by scanning the lecturer's dynamic QR code or tapping a classroom NFC tag.
-4. A dynamic QR code must expire after 10 seconds and must not be reused for a later session.
-5. The system records the student, course, session, timestamp, and accepted check-in method.
-6. A successful check-in produces clear in-app confirmation.
-7. Duplicate check-ins must not create duplicate attendance records.
-8. Failed check-ins must explain whether the cause was an expired code, an inactive session, location validation, or a system error.
-
-#### Location Validation
-
-Location validation may be enabled for a classroom session. Where enabled, the app must verify that the device is within the configured classroom area at check-in. The university must approve:
-
-- When location validation is required
-- The allowed accuracy and radius
-- The fallback behavior if location permission or position accuracy is unavailable
-- Whether an alternative check-in method is permitted
-
-The first release must not use location access without clear user consent.
-
-### 7.5 Attendance Records
-
-1. Students can view the number of sessions attended and the total number of sessions held for each course.
-2. The attendance percentage is calculated from the confirmed attendance and session totals.
-3. The app warns a student before their attendance falls below the 75% exam threshold.
-4. The 75% threshold must be confirmed against current university policy before the warning is enabled.
-5. Lecturers can view course attendance summaries for their assigned sessions.
-6. Reconciliation of a corrected, missing, or disputed attendance record is handled through an authorized workflow.
-
-### 7.6 Campus Balances
-
-1. The app shows the student's latest available tuition clearance status.
-2. The app shows the latest available cafeteria, meal, and utility balances supplied by authorized systems.
-3. The screen identifies the data source and last synchronization time.
-4. The app does not imply that a balance has been updated if it is only cached data.
-5. Balance values are read-only in the MVP.
-
-### 7.7 Course Materials and Virtual Classroom Links
-
-1. Lecturers can add or update course-specific links and materials.
-2. Students only see materials for courses to which they are enrolled or otherwise authorized.
-3. The app supports links to online classes, lecture slides, and assignments.
-4. Assignment deadlines display the due date and course name.
-5. A removed or expired link does not remain as an active resource.
-
-### 7.8 Official Announcements
-
-1. Administrators select one or more target audiences.
-2. Supported audience fields are faculty, department, and level.
-3. Only students whose approved profile matches the selected audience receive the targeted announcement.
-4. Administrators can save a draft and publish or schedule an approved announcement.
-5. Notifications are sent only when push notifications are enabled and the target user has opted in.
-6. Students can view the latest official announcements in a chronological feed.
-7. The announcement feed indicates whether a notice is currently relevant to the student.
-
-## 8. Offline Behavior
-
-The app should prioritize availability for data that has already been successfully synchronized.
-
-- Timetables, semester grades, campus balances, and official announcements may be cached on the device.
-- Every cached screen displays the latest saved update time.
-- Offline screens work with the last approved data stored on the device.
-- Offline changes are limited to clearly supported actions, such as draft course selections.
-- The app queues supported submission attempts and prevents misleading success messages before confirmation is received.
-- Cached academic or financial records must not be shared outside the student's authenticated device session.
-- Local data is removed when the user signs out where university security policy requires it.
-
-Specific local storage, cache expiry, and conflict-resolution rules should be documented before implementation.
-
-## 9. Web Dashboard
-
-The web dashboard is the staff-facing interface for lecturers and administrators. The MVP should support:
-
-- Lecturer sign-in and course selection
-- Attendance session creation and monitoring
-- Course resource management
-- Grade entry within authorized workflows
-- Administrative course and credit record management
-- Announcement targeting and publishing
-
-The dashboard must be responsive and usable on supported desktop and laptop browsers. Mobile dashboard support is not a release requirement unless university stakeholders request it.
-
-## 10. Non-Functional Requirements
-
-### 10.1 Performance
-
-- Saved timetable, grade, and balance screens should appear within 1 second on agreed offline test devices.
-- The app should show a loading or pending state for network operations instead of appearing frozen.
-- Attendance submission should provide a result promptly on the active network and remain recoverable after temporary failures.
-
-The final performance targets must be validated on the supported device and network set.
-
-### 10.2 Availability and Reliability
-
-- The system should tolerate temporary loss of network access and synchronize recoverable actions when connectivity returns.
-- Users should receive an explicit pending, successful, or failed result for submitted actions.
-- Duplicate submissions should not create duplicate academic or attendance records.
-- The system should retain audit information for significant record changes where required by policy.
-
-### 10.3 Security and Privacy
-
-- Communications with backend services must use encrypted transport.
-- Authentication and authorization decisions must be enforced by the backend, not only by the interface.
-- Devices must store sensitive data securely and limit access to the signed-in account.
-- Logs must not expose credentials, private attendance codes, or unnecessary personal data.
-- Role permissions must be reviewed before release and after material changes to workflows.
-- Push notifications must not expose sensitive academic or financial details in notification previews.
-
-### 10.4 Compatibility
-
-- The student app will be developed for iOS and Android.
-- The lecturer and administrator dashboard will run on a modern web browser.
-- Supported operating-system and browser versions must be listed before implementation.
-- The interface must work on common screen sizes and remain usable with large text settings.
-
-### 10.5 Accessibility
-
-- Text must meet agreed contrast requirements.
-- Controls must have accessible names and visible focus states.
-- Information must not be communicated by color alone.
-- Core tasks must be usable through a screen reader or comparable assistive technology where supported by the platform.
-
-### 10.6 Maintainability
-
-- Integrations with UMIS and campus systems must be isolated behind documented service boundaries.
-- Data models must include identifiers for synchronization status and source records where relevant.
-- Configuration such as grading and attendance rules should not require application code changes where practical.
-
-## 11. Proposed Technology
-
-| Area | Proposed technology |
+| User profile | Authentication user ID, display name, role |
+| Course | Unique code, title, credit units, lecturer ID, archived status |
+| Course schedule | Course ID, day, start time, end time, room |
+| Registration request | Student ID, term, status, submitted time, reviewer ID, rejection reason |
+| Registration item | Registration request ID, course ID |
+| Attendance session | Course ID, lecturer ID, start time, end time, active status, session identifier |
+| Attendance record | Session ID, student ID, check-in time |
+| Announcement | Title, message, author ID, status, created time, published time |
+
+Database relationships must use stable identifiers rather than display names. The project should include a small seed dataset with fictional users, courses, schedules, announcements, and registrations.
+
+## 10. User Interface Requirements
+
+- The application must use one consistent navigation structure, with options appropriate to the signed-in role.
+- The main student tasks must be reachable from the student dashboard.
+- Every page must include a visible page title and a clear way to return to the dashboard.
+- Forms must label their fields and show validation errors beside the relevant field or form.
+- Destructive or irreversible prototype actions must require confirmation.
+- Loading, empty, success, and error states must be designed for the main workflows.
+- Layouts must adapt to phone and desktop widths without requiring separate applications.
+- Controls must be usable by keyboard, have visible focus, and not rely on color alone to communicate status.
+
+## 11. Non-Functional Requirements
+
+### 11.1 Performance and Reliability
+
+- With the small seeded dataset and a normal development or demonstration network, the main pages should become usable within 3 seconds.
+- The application must show a loading state while waiting for data.
+- Failed requests must show an error and a way to retry where appropriate.
+- The application must not show a registration approval or attendance check-in as successful until the backend confirms it.
+- The school-project demo target is up to 10 concurrent test users. This is a test scenario, not a production capacity guarantee.
+
+### 11.2 Security and Privacy
+
+- Use fictional data for demonstrations. Do not enter real student grades, financial details, or sensitive identifiers.
+- Enforce role and ownership checks on server-side requests and database access.
+- Do not put database service-role secrets or other private credentials in browser code or source control.
+- Validate submitted data on the server as well as in the interface.
+- Use HTTPS for any deployed demo.
+- Avoid logging passwords, session credentials, or unnecessary personal information.
+- Test that a student cannot access another student's records by changing a URL or request identifier.
+- The prototype has not been reviewed for production use and must not be used to make official academic decisions.
+
+### 11.3 Accessibility
+
+- Use readable text sizes and sufficient contrast.
+- Provide labels for form controls and useful alternative text for meaningful images.
+- Support keyboard navigation and visible focus indicators.
+- Present status with text as well as color.
+
+### 11.4 Maintainability
+
+- Keep the prototype as one application with clear modules for authentication, courses, registration, attendance, and announcements.
+- Keep database reads and writes out of presentation-only components where practical.
+- Store schema changes as database migrations or another documented, repeatable process.
+- Keep secrets and environment-specific settings in local environment configuration, not committed files.
+- Document how to install, seed, run, and demonstrate the application.
+
+## 12. Recommended Implementation
+
+To keep the school project approachable, use one agreed stack rather than maintaining multiple alternatives:
+
+| Area | Recommendation |
 | --- | --- |
-| Mobile app | React Native using Expo |
-| Web dashboard | Next.js |
-| Backend and real-time sync | Convex or Supabase |
-| Local storage | SQLite or MMKV |
+| Web application | Next.js with TypeScript |
+| Database | Supabase PostgreSQL |
+| Authentication | Supabase Auth with manually created project test accounts |
+| Hosting | Local development first; one approved low-cost hosting service for the demo if needed |
+| QR generation and scanning | A maintained QR library selected by the team and tested in target browsers |
 
-These are implementation proposals, not settled decisions. The project team should compare the options against university hosting requirements, integration needs, operational cost, offline capabilities, and team experience before selection.
+This is a recommendation, not a requirement to use a particular vendor. The team should use tools it can understand and support. Do not add a separate mobile application, microservices, real-time infrastructure, or offline database for the school-project MVP.
 
-## 12. Integrations and Dependencies
+The application should use a conventional web application structure and PostgreSQL foreign keys. Use database access policies and server-side authorization carefully, and test them with all three roles. Keep the service-role key exclusively on the server. If the team cannot confidently configure database row-level security, limit access through server-side routes and do not expose unrestricted database credentials to the browser.
 
-The final implementation depends on access to the following university systems or responsible owners:
+## 13. Acceptance Criteria
 
-- UMIS academic and student profile records
-- Course registration rules and approval workflow
-- Grade source and grading scale
-- Attendance policy and course assignments
-- Campus balance, tuition, meal, and utility systems
-- Identity and access management
-- Push notification service
-- NFC and QR device support
-- Official announcement approval process
+The MVP is ready for its school demonstration when all of the following are true:
 
-Each integration requires documented ownership, authorization, data fields, update frequency, and failure behavior.
+1. The team can install and run the application using the setup instructions.
+2. A student, lecturer, and administrator can each sign in using a separate test account.
+3. A student can view the sample timetable and announcements.
+4. A student can submit a valid course request and see it as pending.
+5. An administrator can approve or reject that request, and the student sees the updated status.
+6. A lecturer can start an attendance session for an assigned course and end it.
+7. A signed-in student can check in to an active session by scanning its QR code.
+8. A second check-in by the same student does not create another attendance record.
+9. A student cannot check in to an ended session.
+10. A student cannot view another student's registration or attendance data.
+11. A lecturer cannot manage a course that is not assigned to them.
+12. An administrator can publish an announcement and the student can see it.
+13. Invalid form submissions show understandable errors.
+14. The demonstration uses fictional data and explains that the system is a prototype.
 
-## 13. Assumptions
+## 14. Success Measures
 
-- The university will provide approved APIs or export mechanisms for authoritative academic data.
-- The registrar or another designated authority will approve final registration and grade workflows.
-- Students, lecturers, and administrators have approved university accounts.
-- The project is permitted to use device NFC and camera features, subject to platform support.
-- The 75% attendance threshold will be confirmed against current policy.
-- Mobile app and web dashboard users can access the internet at least intermittently for synchronization.
-- Stakeholders will identify supported devices and browsers before test planning.
+Evaluate the prototype with a small, documented usability test. A suggested school-project test is five classmates or representative test users completing the following tasks:
 
-## 14. Risks and Mitigations
+- Find the next class in the timetable.
+- Submit a course request.
+- Check the status of the request after an administrator decision.
+- Scan a QR code and confirm attendance.
+- Find the latest announcement.
+
+Suggested success criteria:
+
+- At least four of five testers complete the main tasks without the team taking over their device.
+- Testers can identify whether a registration is pending, approved, or rejected.
+- Duplicate check-in attempts are prevented in every test.
+- Each role is unable to perform at least one action outside its permissions in role testing.
+- The team records usability issues and demonstrates fixes for any issue that blocks a core task.
+
+These are classroom evaluation goals, not production service-level commitments.
+
+## 15. Risks and Mitigations
 
 | Risk | Mitigation |
 | --- | --- |
-| University policy differs between faculties or courses | Obtain written policy confirmation before hard-coding thresholds or rules |
-| UMIS APIs are unavailable or incomplete | Define integration contracts and provide cached read behavior where supported |
-| Students share or impersonate attendance codes | Use short-lived signed sessions, role checks, and duplicate prevention |
-| QR or NFC is not available on every device | Support approved alternate check-in methods where policy allows |
-| Location accuracy causes false failures | Make fallback and assistance flows explicit; do not block access silently |
-| Outdated cached data is mistaken for current data | Show source and synchronization timestamps on all cached data |
-| Pilot users enroll different types of devices | Test representative iOS and Android devices early |
-| Sensitive announcements are sent to the wrong audience | Validate audience profiles and require publication review |
+| Team attempts too many features at once | Complete sign-in, course requests, announcements, and QR attendance before optional enhancements |
+| Real student data is used in the demo | Use fictional seed data and exclude sensitive data from screenshots and logs |
+| Role restrictions exist only in the interface | Enforce and test permissions at server and database boundaries |
+| QR codes are copied or shared | State the prototype limitation; require sign-in, active session checks, and one record per student |
+| Camera scanning fails on a test device | Test early and provide a lecturer-assisted demo fallback that does not pretend to be secure |
+| Database credentials are exposed | Keep privileged credentials server-side and out of source control |
+| Course rules are mistaken for university policy | Label sample values as project assumptions and use only fictional course data |
+| Team has limited development time | Defer timetable editing, advanced validation, real-time updates, and optional interface polish |
 
-## 15. Release Plan
+## 16. Suggested Project Phases
 
-### Phase 1: Foundations
+### Phase 1: Setup
 
-- Confirm users, roles, data owners, and academic policies
-- Finalize authentication and integration architecture
-- Create the core data model and access rules
+- Agree on the framework and repository workflow.
+- Create the database schema and fictional seed accounts.
+- Build sign-in and role-aware navigation.
+- Confirm each role is enforced on the server.
 
-### Phase 2: MVP Product
+### Phase 2: Core Academic Demo
 
-- Build student timetable, grades, registration, balance, and announcement flows
-- Build the staff attendance and course dashboard
-- Implement offline caching and synchronization
+- Add the course catalogue and course administration.
+- Add student registration requests and administrator decisions.
+- Add the sample timetable and announcements.
+- Test input validation and access boundaries.
 
-### Phase 3: Pilot
+### Phase 3: Attendance Demo
 
-- Conduct usability and policy reviews
-- Test with representative student and lecturer groups
-- Measure the success metrics in Section 3.2
-- Resolve critical security, integration, and data-accuracy issues
+- Add lecturer-created attendance sessions.
+- Generate and scan session QR codes.
+- Prevent duplicate check-ins and reject inactive sessions.
+- Test the full flow on the browsers and phones available to the team.
 
-### Phase 4: Release Readiness
+### Phase 4: Evaluation and Delivery
 
-- Approve supported platforms and test environments
-- Complete security, privacy, accessibility, and operational checks
-- Document support and incident processes
-- Publish the MVP to the approved pilot or production audience
+- Seed a clean demonstration dataset.
+- Run the acceptance tests in Section 13.
+- Conduct the usability test in Section 14.
+- Fix core workflow and permission issues before adding optional features.
+- Deliver setup instructions, a short user guide, and a list of known limitations.
 
-## 16. Open Questions
+The team should adjust the calendar to its course deadline and experience. A working end-to-end flow is more important than implementing every deferred idea.
 
-The project team should obtain answers to the following questions before finalizing the MVP:
+## 17. Path from Prototype to a Licensable Product
 
-1. Which systems are authoritative for student records, course registration, grades, balances, and attendance?
-2. What exact prerequisite, credit-unit, timetable, and grade rules apply?
-3. Is 75% consistently the university-wide attendance threshold, or does policy vary by faculty or course?
-4. Which identity provider and account enrollment process will be used?
-5. Are students required to grant location permission for attendance?
-6. What alternate attendance method is accepted when NFC or QR is unavailable?
-7. What device operating-system and browser versions must be supported?
-8. Which teams will approve announcements and grade submissions?
-9. Is Supabase or Convex preferred, and what hosting and data-residency requirements apply?
-10. How long should cached records remain available when they are not synchronized?
-11. What are the pilot size and duration?
-12. What are the reporting and audit requirements for attendance and course registration?
+The school-project MVP is not a licensable university product by itself. If the prototype is successful, further work should be planned and funded in deliberate stages:
+
+### Stage A: Validate the Product
+
+- Interview students, lecturers, registrars, IT staff, and administrators.
+- Confirm which workflows are valuable and which policies vary by faculty.
+- Obtain written agreement from the university system owners.
+- Revisit accessibility, privacy, and data-retention requirements.
+
+### Stage B: Build an Institutional Pilot
+
+- Integrate with an approved identity provider and authoritative academic systems.
+- Define who owns each record and which system is the source of truth.
+- Add real approval, correction, and support workflows.
+- Perform a security and privacy review before using personal data.
+- Create backup, monitoring, incident response, and data recovery procedures.
+- Run a limited pilot and load tests with an agreed number of users.
+
+### Stage C: Prepare for Licensing
+
+- Define service availability, support hours, onboarding, and incident responsibilities.
+- Agree on hosting location, data residency, retention, and deletion requirements.
+- Complete independent security testing and resolve findings.
+- Establish tenant isolation if multiple universities will use the same service.
+- Document service levels, pricing, implementation responsibilities, and product limitations.
+- Confirm legal, procurement, accessibility, and regulatory requirements with qualified professionals.
+
+Keep the initial codebase modular and the data model relational, but do not build multi-tenant infrastructure, microservices, or enterprise operations into the school project without a real requirement. Those decisions should be made with a university pilot customer and technical review.
+
+## 18. Assumptions and Open Questions
+
+For the school-project MVP, this document assumes:
+
+- The team can create and use a hosted or local PostgreSQL database.
+- The demonstration will use fictional accounts and academic data.
+- One responsive website is acceptable in place of separate mobile and staff applications.
+- Administrators will manually approve sample course requests.
+- The timetable and course rules are sample data rather than official university policy.
+- QR scanning will be tested on devices and browsers available to the team.
+
+Questions for the project team or instructor:
+
+1. How many developers are on the team, and what is the delivery deadline?
+2. Is a responsive web application acceptable for assessment, or is a native mobile app required?
+3. Does the instructor require a specific programming language, database, or hosting platform?
+4. Will the demonstration be local, deployed, or both?
+5. Which QR scanning devices and browsers can the team test?
+6. Are there marking criteria that require any feature not included in this MVP?
